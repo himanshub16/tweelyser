@@ -39,8 +39,12 @@ var PEOPLE_MENTIONED_THE_MOST_BY_ME = null;
 
 // categorisation of tweets on the basis of their length
 var TWEET_LENGTH_LIST = {
-	"0-30":null, "30-50": null, "50-100": null, "100-120": null, "120-150": null
+	"0-30":0, "30-50": 0, "50-100": 0, "100-120": 0, "120-140": 0
 };
+
+// tweets with-without media
+var TWEETS_WITH_MEDIA = 0;
+var TWEETS_WITHOUT_MEDIA = 0;
 
 
 // create dummy elements to hold data
@@ -64,18 +68,63 @@ function getTweets() {
 			TWEET_RETWEET_COUNT_LIST = [];
 			TWEET_FAVORITE_COUNT_LIST = [];
 
+			var max_retweet = { "count": 0, "index": -1 };
+			var total_hashtags = 0, tweets_with_hashtags = 0;
 
 			for (var i = 0; i < TWEET_LIST.length; i++) {
+
+				// get date
 				var d = new Date( TWEET_LIST[i].created_at )
 				var hour = d.getHours();
 
-				TWEET_WITH_TIME_OF_DAY[~~(hour/2)] ++;
+				// get hashtags
+				var hashtags = TWEET_LIST[i].entities.hashtags;
+				if (hashtags.length !== 0) {
+					tweets_with_hashtags++;
+					total_hashtags += hashtags.length;
+				}
 
+				// get tweets with time of day
+				TWEET_WITH_TIME_OF_DAY[~~(hour/2)] ++;
+				if (TWEET_LIST[i].retweet_count >= max_retweet.count) {
+					max_retweet.count++;
+					max_retweet.index = i;
+				}
+
+				// get favorites and retweet count list 
 				if (TWEET_LIST[i].favorite_count !== 0) {
 					TWEET_RETWEET_COUNT_LIST.push( TWEET_LIST[i].retweet_count );
 					TWEET_FAVORITE_COUNT_LIST.push( TWEET_LIST[i].favorite_count );
 				}
+
+				// tweet filter based on tweet length
+				var tweet_length = TWEET_LIST[i].text.length;
+				if (tweet_length < 30) {
+					TWEET_LENGTH_LIST["0-30"]++;
+				} else if (tweet_length < 50) {
+					TWEET_LENGTH_LIST["30-50"]++;
+				} else if (tweet_length < 100) {
+					TWEET_LENGTH_LIST["50-100"]++;
+				} else if (tweet_length < 120) {
+					TWEET_LENGTH_LIST["100-120"]++;
+				} else if (tweet_length < 140) {
+					TWEET_LENGTH_LIST["120-140"]++;
+				}
+
+				// check if the tweet contains media
+				if (TWEET_LIST[i].entities.media === undefined) {
+					TWEETS_WITHOUT_MEDIA ++;
+				}
+				else {
+					TWEETS_WITH_MEDIA ++;
+				}
 			}
+
+			if (max_retweet.index >= 0) {
+				TWEET_WITH_MAX_RETWEETS = TWEET_LIST[max_retweet.index];
+			}
+
+			HASHTAGS_FREQUENCY = total_hashtags / tweets_with_hashtags;
 		}
 	});
 }
