@@ -148,6 +148,10 @@ function getTweets() {
 			// }
 
 			HASHTAGS_FREQUENCY = total_hashtags / tweets_with_hashtags;
+		},
+
+		complete: function() {
+			console.log('ajax completed');
 		}
 	});
 }
