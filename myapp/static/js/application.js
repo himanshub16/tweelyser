@@ -19,6 +19,21 @@ var TWEET_WITH_TIME_OF_DAY = {
 	"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0
 };
 
+var TWEET_WITH_TIME_OF_DAY_ARRAY = [
+	{ "interval": "0", "tweet_count": 0 },
+	{ "interval": "1", "tweet_count": 0 },
+	{ "interval": "2", "tweet_count": 0 },
+	{ "interval": "3", "tweet_count": 0 },
+	{ "interval": "4", "tweet_count": 0 },
+	{ "interval": "5", "tweet_count": 0 },
+	{ "interval": "6", "tweet_count": 0 },
+	{ "interval": "7", "tweet_count": 0 },
+	{ "interval": "8", "tweet_count": 0 },
+	{ "interval": "9", "tweet_count": 0 },
+	{ "interval": "10", "tweet_count": 0 },
+	{ "interval": "11", "tweet_count": 0 }
+];
+
 // tweet with max retweets (1)
 var TWEET_WITH_MAX_RETWEETS = null;
 
@@ -86,6 +101,8 @@ function getTweets() {
 
 				// get tweets with time of day
 				TWEET_WITH_TIME_OF_DAY[~~(hour/2)] ++;
+				TWEET_WITH_TIME_OF_DAY_ARRAY[~~(hour/2)].tweet_count ++;
+
 				if (TWEET_LIST[i].retweet_count >= max_retweet.count) {
 					max_retweet.count++;
 					max_retweet.index = i;
@@ -123,6 +140,12 @@ function getTweets() {
 			if (max_retweet.index >= 0) {
 				TWEET_WITH_MAX_RETWEETS = TWEET_LIST[max_retweet.index];
 			}
+
+			// prepare json of tweet count with time of day
+			// for (var i = 0; i < TWEET_WITH_TIME_OF_DAY.length; i++) {
+			// 	TWEET_WITH_TIME_OF_DAY_ARRAY[i].tweet_count = TWEET_WITH_TIME_OF_DAY[i];
+			// 	console.log(TWEET_WITH_TIME_OF_DAY[i] + 'it works');
+			// }
 
 			HASHTAGS_FREQUENCY = total_hashtags / tweets_with_hashtags;
 		}
