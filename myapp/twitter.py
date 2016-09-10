@@ -53,8 +53,9 @@ def index():
 def show():
     users = None
     if g.user is not None:
-        resp = twitter.request('followers/list.json?cursor=-1&count=200&screen_name=Adele&skip_status=true&include_user_entities=false')
+        # resp = twitter.request('followers/list.json?cursor=-1&count=200&screen_name=Adele&skip_status=true&include_user_entities=false')
         # resp = twitter.request('statuses/mentions_timeline.json?count=200')
+        resp = twitter.request('statuses/user_timeline.json?screen_name=Adele&count=200&trim_user=true')
         if resp.status == 200:
             users = resp.data
         else:
