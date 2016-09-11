@@ -75,6 +75,7 @@ function run_analysis() {
 
 }
 
+//Bar Graph
 function retweetVsFavorites() {
 	var retweets = TWEET_RETWEET_COUNT_LIST.slice(0, 50);
 	var favorites = TWEET_FAVORITE_COUNT_LIST.slice(0, 50);
@@ -99,6 +100,7 @@ function retweetVsFavorites() {
 	});
 }
 
+//Pie 
 function tweetLength() {
 	var chart = c3.generate({
 	    data: {
@@ -118,6 +120,7 @@ function tweetLength() {
 	});
 }
 
+//Line 
 function tweetWithTimeOfDayChart() {
 	var chart = c3.generate({
 	    bindto: '#chart',
@@ -128,7 +131,8 @@ function tweetWithTimeOfDayChart() {
 			        				TWEET_WITH_TIME_OF_DAY[3],TWEET_WITH_TIME_OF_DAY[4],TWEET_WITH_TIME_OF_DAY[5],
 			        				TWEET_WITH_TIME_OF_DAY[6],TWEET_WITH_TIME_OF_DAY[7],TWEET_WITH_TIME_OF_DAY[8],
 			        				TWEET_WITH_TIME_OF_DAY[9],TWEET_WITH_TIME_OF_DAY[10],TWEET_WITH_TIME_OF_DAY[11] ]
-	      		]
+	      		],
+	      		type : 'spline',
 	    	},
 		axis: {
 			x: {
@@ -139,8 +143,9 @@ function tweetWithTimeOfDayChart() {
 	});
 }
 
+//
 
-
+//AJAX Query
 function getTweets() {
 	xhr = $.ajax({
 		url: "/show",
@@ -217,9 +222,9 @@ function getTweets() {
 		},
 
 		complete: function() {
-			// console.log('ajax completed');
-			// tweetWithTimeOfDayChart();
-			// // retweetVsFavorites();
+			console.log('ajax completed');
+			tweetWithTimeOfDayChart();
+			// retweetVsFavorites();
 			// tweetLength();
 		}
 	});
