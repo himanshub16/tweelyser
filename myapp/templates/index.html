@@ -2,36 +2,35 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/c3.css') }}">
-	<title></title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/materialize.css') }}">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<title>Tweelyser</title>
 </head>
-<body>
-
 <!-- <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script> -->
 <script src="{{ url_for('static', filename='js/jquery-min.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 <script src="{{ url_for('static', filename='js/d3.min.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="{{ url_for('static', filename='js/materialize.min.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 
 <script src="{{ url_for('static', filename='js/application.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 <script src="{{ url_for('static', filename='js/c3.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 
 
+<body>
 
-<!-- <a href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='images/sign-in.png') }}" alt="sign in"></a> -->
-{% if g.user %}
-	<div>
-		you are logged in.
+<section class="valign-wrapper" style="height: 100vh; width: 100vw;">
+	<div class="valign center-align row" style="width: 100vw; padding: 50px;">
+		<div class="col l4"></div>
+		<div class="card col l4">
+			<h1>
+				<input class="card-content col l12" style="font-size: 0.8em" />
+				<button class="btn waves-effect waves-light"><i class="material-icons right">search</i></button>
+			</h1>
+		</div>
+		<div class="col l4"></div>
 	</div>
-{% else %}
-<p>
-  Sign in to view your public timeline and to tweet from this
-  example application.
-</p>
-<p>
-  <a href="{{ url_for('login') }}"><img src="{{
-    url_for('static', filename='images/sign-in.png') }}" alt="sign in"></a>
-</p>
-{% endif %}
-
-<div id="chart"></div>
+<section>
+	
 
 </body>
+
 </html>

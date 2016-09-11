@@ -1,14 +1,85 @@
-{% if g.user %}
-	<div>
-		you are logged in.
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/c3.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/materialize.css') }}">
+	<title>Tweelyser</title>
+</head>
+<!-- <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script> -->
+<script src="{{ url_for('static', filename='js/jquery-min.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="{{ url_for('static', filename='js/d3.min.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="{{ url_for('static', filename='js/materialize.min.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+
+<script src="{{ url_for('static', filename='js/application.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="{{ url_for('static', filename='js/c3.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+
+
+<body>
+
+<div class="nav-fixed">
+	<nav class="blue darken-1">
+		<div class="nav-wrapper lighten-1 right hand-on-med-down">
+		<ul>
+			{% if g.user %}
+				<li>
+					<a href="{{ url_for('logout') }}" class="waves-effect waves-light white black-text btn">Logout</a>
+				</li>
+			{% else %}
+			    <li>
+					<a href="{{ url_for('login') }}" class="waves-effect waves-light white black-text btn">Login</a>
+				</li>
+			{% endif %}
+		</ul>
+		</div>
+	</nav>
+</div>
+
+<main class="row">
+	<div class="col l1"></div>
+	<div class="row col l10">
+
+		<div class="col l12">
+			
+			<div class="card hoverable white">
+				<div class="card-content">
+					<span class="card-title">Analysis of your last 200 tweets</span>
+				</div>
+			</div>
+
+		</div>
+		<div class="col l12">
+			
+			<div class="card hoverable white">
+				<div class="card-content">
+					<span class="card-title">Time of day</span>
+				</div>
+			</div>
+
+		</div>
+		<div class="col l8">
+			
+			<div class="card hoverable white">
+				<div class="card-content">
+					<span class="card-title">Time of day</span>
+				</div>
+			</div>
+
+		</div>
+		<div class="col l4">
+			
+			<div class="card hoverable white">
+				<div class="card-content">
+					<span class="card-title">Time of day</span>
+				</div>
+			</div>
+
+		</div>
+
+
 	</div>
-{% else %}
-<p>
-  Sign in to view your public timeline and to tweet from this
-  example application.
-</p>
-<p>
-  <a href="{{ url_for('login') }}"><img src="{{
-    url_for('static', filename='images/sign-in.png') }}" alt="sign in"></a>
-</p>
-{% endif %}
+	<div class="col l1"></div>
+</main>
+
+</body>
+
+</html>

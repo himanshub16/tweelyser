@@ -40,27 +40,21 @@ def before_request():
 
 @app.route('/')
 def index():
-    tweets = None
-    if g.user is not None:
-        resp = twitter.request('statuses/home_timeline.json')
-        if resp.status == 200:
-            tweets = resp.data
-        else:
-            flash('Unable to load tweets from Twitter.')
-    return render_template('index.html', tweets=tweets)
+    return render_template('index.html')
 
 @app.route('/show')
 def show():
     users = None
     if g.user is not None:
-        # resp = twitter.request('followers/list.json?cursor=-1&count=200&screen_name=Adele&skip_status=true&include_user_entities=false')
-        # resp = twitter.request('statuses/mentions_timeline.json?count=200')
-        resp = twitter.request('statuses/user_timeline.json?screen_name=Adele&count=200&trim_user=true')
-        if resp.status == 200:
-            users = resp.data
-        else:
-            flash('Unable to load tweets from Twitter.')
-    return jsonify(users)
+    	pass
+        # resp = twitter.request('statuses/user_timeline.json?screen_name=Adele&count=200&trim_user=true')
+    #     if resp.status == 200:
+    #         users = resp.data
+    #     else:
+    #         flash('Unable to load tweets from Twitter.')
+    # return jsonify(users)
+    return render_template('show.html')
+
 
 
 @app.route('/login')

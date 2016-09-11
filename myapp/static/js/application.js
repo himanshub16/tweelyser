@@ -217,10 +217,10 @@ function getTweets() {
 		},
 
 		complete: function() {
-			console.log('ajax completed');
-			tweetWithTimeOfDayChart();
-			// retweetVsFavorites();
-			tweetLength();
+			// console.log('ajax completed');
+			// tweetWithTimeOfDayChart();
+			// // retweetVsFavorites();
+			// tweetLength();
 		}
 	});
 }
