@@ -75,6 +75,72 @@ function run_analysis() {
 
 }
 
+function retweetVsFavorites() {
+	var retweets = TWEET_RETWEET_COUNT_LIST.slice(0, 50);
+	var favorites = TWEET_FAVORITE_COUNT_LIST.slice(0, 50);
+	retweets.unshift('Retweets');
+	favorites.unshift('Favorites');
+	var chart = c3.generate({
+		bindto: "#chart",
+	    data: {
+	        columns: [
+	            retweets,
+	            favorites
+	        ],	
+	        type: 'bar'
+	    },
+	    bar: {
+	        width: {
+	            ratio: 0.5 // this makes bar width 50% of length between ticks
+	        }
+	        // or
+	        //width: 100 // this makes bar width 100px
+	    }
+	});
+}
+
+function tweetLength() {
+	var chart = c3.generate({
+	    data: {
+	        // iris data from R
+	        columns: [
+	            ['0-30',    TWEET_LENGTH_LIST["0-30"]    ],
+	            ['30-50',   TWEET_LENGTH_LIST["30-50"]   ], 
+	            ['50-100',  TWEET_LENGTH_LIST["50-100"]  ],
+	            ['100-120', TWEET_LENGTH_LIST["100-120"] ],
+	            ['120-150', TWEET_LENGTH_LIST["120-140"] ]	
+	        ],
+	        type : 'pie',
+	        onclick: function (d, i) { console.log("onclick", d, i); },
+	        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+	        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+	    }
+	});
+}
+
+function tweetWithTimeOfDayChart() {
+	var chart = c3.generate({
+	    bindto: '#chart',
+
+	    data: {
+		    columns: [
+		    		['Tweet count', TWEET_WITH_TIME_OF_DAY[0],TWEET_WITH_TIME_OF_DAY[1],TWEET_WITH_TIME_OF_DAY[2],
+			        				TWEET_WITH_TIME_OF_DAY[3],TWEET_WITH_TIME_OF_DAY[4],TWEET_WITH_TIME_OF_DAY[5],
+			        				TWEET_WITH_TIME_OF_DAY[6],TWEET_WITH_TIME_OF_DAY[7],TWEET_WITH_TIME_OF_DAY[8],
+			        				TWEET_WITH_TIME_OF_DAY[9],TWEET_WITH_TIME_OF_DAY[10],TWEET_WITH_TIME_OF_DAY[11] ]
+	      		]
+	    	},
+		axis: {
+			x: {
+		    	type: "category",
+		    	categories: ["12 AM", "2 AM", '4 AM', '6 AM', '8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM', '10 PM']
+			}
+		}
+	});
+}
+
+
+
 function getTweets() {
 	xhr = $.ajax({
 		url: "/show",
@@ -152,7 +218,13 @@ function getTweets() {
 
 		complete: function() {
 			console.log('ajax completed');
+			tweetWithTimeOfDayChart();
+			// retweetVsFavorites();
+			tweetLength();
 		}
 	});
 }
+
+
+getTweets();
 
