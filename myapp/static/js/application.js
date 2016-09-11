@@ -5,6 +5,11 @@ var TWEET_RETWEET_COUNT_LIST = null;
 var TWEET_FAVORITE_COUNT_LIST = null;
 var TWEET_DATE_LIST = null;
 
+var USER_INFO = null;
+var FOLLOWER_COUNT = 0; 
+var FOLLOWING_COUNT = 0;
+
+
 // verbose list of tweet objects of retweets by the user
 var RETWEET_LIST = null;
 
@@ -52,6 +57,7 @@ var HASHTAGS_FREQUENCY = null;
 // top 3 people mentioned the most by me (their user id)
 var PEOPLE_MENTIONED_THE_MOST_BY_ME = null;
 
+
 // categorisation of tweets on the basis of their length
 var TWEET_LENGTH_LIST = {
 	"0-30":0, "30-50": 0, "50-100": 0, "100-120": 0, "120-140": 0
@@ -60,6 +66,8 @@ var TWEET_LENGTH_LIST = {
 // tweets with-without media
 var TWEETS_WITH_MEDIA = 0;
 var TWEETS_WITHOUT_MEDIA = 0;
+
+var TIME_GAP_BETWEEN_TWEETS = [];
 
 
 // create dummy elements to hold data
@@ -75,6 +83,16 @@ function run_analysis() {
 
 }
 
+function getTweeetWithMaxRetweets() {
+	console.log(TWEET_WITH_MAX_RETWEETS);
+	$('#maxRetweet').html(TWEET_WITH_MAX_RETWEETS.text);
+}
+
+
+function getTweetsWithMedia() {
+	$('#tweetsWithMedia').text(((TWEETS_WITH_MEDIA/(TWEETS_WITHOUT_MEDIA + TWEETS_WITH_MEDIA))*100).toFixed(2).toString() + " %")
+}
+
 //Bar Graph
 function retweetVsFavorites() {
 	var retweets = TWEET_RETWEET_COUNT_LIST.slice(0, 50);
@@ -82,7 +100,7 @@ function retweetVsFavorites() {
 	retweets.unshift('Retweets');
 	favorites.unshift('Favorites');
 	var chart = c3.generate({
-		bindto: "#chart",
+		bindto: "#retweetsvsfav",
 	    data: {
 	        columns: [
 	            retweets,
@@ -100,9 +118,40 @@ function retweetVsFavorites() {
 	});
 }
 
+function timeBetweenTweets() {
+	var dataSet = TIME_GAP_BETWEEN_TWEETS.slice(0,100);
+	dataSet.unshift("Count");
+	var chart = c3.generate({
+	bindto: "#timeBetweenTweets",
+    data: {
+        // xs: {
+        //     setosa: 'setosa_x',
+        //     versicolor: 'versicolor_x',
+        // },
+        // iris data from R
+        columns: [
+        	dataSet
+        ],
+        type: 'scatter'
+    },
+    axis: {
+        x: {
+            label: 'Tweet index',
+            tick: {
+                fit: false
+            }
+        },
+        y: {
+            label: 'Hours Between Tweets'
+        }
+    }
+});
+}
+
 //Pie 
 function tweetLength() {
 	var chart = c3.generate({
+		bindto: "#tweetLength",
 	    data: {
 	        // iris data from R
 	        columns: [
@@ -123,7 +172,7 @@ function tweetLength() {
 //Line 
 function tweetWithTimeOfDayChart() {
 	var chart = c3.generate({
-	    bindto: '#chart',
+	    bindto: '#getTimeOfDay',
 
 	    data: {
 		    columns: [
@@ -141,6 +190,10 @@ function tweetWithTimeOfDayChart() {
 			}
 		}
 	});
+}
+
+function setHashtagFreq() {
+	$('#hashtagFrequency').text(HASHTAGS_FREQUENCY.toFixed(2));
 }
 
 //
@@ -219,17 +272,77 @@ function getTweets() {
 			// }
 
 			HASHTAGS_FREQUENCY = total_hashtags / tweets_with_hashtags;
+
+			// get gap between tweets
+			TIME_GAP_BETWEEN_TWEETS = [];
+			for (var i = 1; i < TWEET_LIST.length; i++) {
+				var time1 = new Date(TWEET_LIST[i].created_at);
+				var time2 = new Date(TWEET_LIST[i-1].created_at);
+
+				TIME_GAP_BETWEEN_TWEETS.push(((time2.getTime() - time1.getTime())/(60000*60)).toFixed(2));
+			}
 		},
 
 		complete: function() {
 			console.log('ajax completed');
+			setHashtagFreq();
 			tweetWithTimeOfDayChart();
-			// retweetVsFavorites();
-			// tweetLength();
+			retweetVsFavorites();
+			getTweetsWithMedia();
+			getTweeetWithMaxRetweets();
+			tweetLength();
+			timeBetweenTweets();
 		}
 	});
 }
 
 
+function getUserData() {
+	xhr = $.ajax({
+		url: "/lookup",
+		success: function(data, status, xhr) {
+			USER_INFO = xhr.responseJSON[0];
+			$('#userName').text(USER_INFO.name);
+			$('#screenName').text("@"+USER_INFO.screen_name);
+			$('#userProfilePic').attr('src', USER_INFO.profile_image_url.replace("_normal", ''));
+
+			var followers = USER_INFO.followers_count; 
+			var following = USER_INFO.friends_count;
+			var ratio = (followers/following).toFixed(2);
+			console.log(ratio);
+			$('#followersToFollowing').text(ratio.toString());
+		},
+
+		complete: function() {
+			console.log('ajax completed');
+		}
+	});
+}
+
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+
 getTweets();
+getUserData();
 

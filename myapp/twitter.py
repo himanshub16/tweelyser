@@ -46,14 +46,31 @@ def index():
 def show():
     users = None
     if g.user is not None:
-    	pass
-        # resp = twitter.request('statuses/user_timeline.json?screen_name=Adele&count=200&trim_user=true')
-    #     if resp.status == 200:
-    #         users = resp.data
-    #     else:
-    #         flash('Unable to load tweets from Twitter.')
-    # return jsonify(users)
-    return render_template('show.html')
+        resp = twitter.request('statuses/user_timeline.json?screen_name='+request.cookies['screenName']+'&count=200&trim_user=true')
+        if resp.status == 200:
+            users = resp.data
+        else:
+            flash('Unable to load tweets from Twitter.')
+    return jsonify(users)
+
+
+@app.route('/results')
+def results():
+	users = None
+	if g.user is not None:
+		pass
+	return render_template('show.html')
+
+@app.route('/lookup')
+def lookup():
+	userobj = None
+	if g.user is not None:
+		resp = twitter.request('users/lookup.json?screen_name='+request.cookies['screenName']+'&include_entities=false')
+		if resp.status == 200: 
+			userobj = resp.data
+		else:
+			flash("Unable to load user information")
+	return jsonify(userobj)
 
 
 

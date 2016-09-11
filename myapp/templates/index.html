@@ -20,16 +20,29 @@
 <section class="valign-wrapper" style="height: 100vh; width: 100vw;">
 	<div class="valign center-align row" style="width: 100vw; padding: 50px;">
 		<div class="col l4"></div>
-		<div class="card col l4">
+		<div class="card col l4 hoverable">
+{% if g.user %}
 			<h1>
-				<input class="card-content col l12" style="font-size: 0.8em" />
-				<button class="btn waves-effect waves-light"><i class="material-icons right">search</i></button>
+			<form action="/results" method="GET" onsubmit="setCookie('screenName', this.screenName.value, 1)">
+			<input name="screenName" class="card-content col l12" style="font-size: 0.6em" placeholder="@" />
+			</form>
 			</h1>
+{% else %}
+				<a href="{{ url_for('login') }}" title=""><button class="btn waves-effect waves-light">Login with Twitter</button></a>
+{% endif %}
 		</div>
 		<div class="col l4"></div>
 	</div>
 <section>
-	
+
+
+<script>
+	var screenName = document.forms[0].screenName;
+	if (screenName.length != 0) {
+		document.cookie = "screenName="+screenName;
+	}
+</script>
+
 
 </body>
 
