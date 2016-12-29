@@ -1,0 +1,7 @@
+{
+	"name": "Tweelyser",
+	"description": "Analytics for Twitter",
+	"image": "heroku/python",
+	"repository": "https://github.com/himanshub16/tweelyser",
+	"keywords": ["python", "flask"]
+}
