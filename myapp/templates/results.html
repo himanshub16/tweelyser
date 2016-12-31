@@ -1,0 +1,248 @@
+<html>
+<head>
+    <title>Tweelyer : Analytics for your Twitter profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+
+    <script type="text/javascript" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+    <style> 
+        .preloader-background {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #eee;
+            
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;	
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            /*background: url({{ url_for('static', filename='home.jpg') }});
+            background-size: cover;*/
+        }
+        .clearfix {
+            min-height: 10px;
+            width: 100%;
+            display: block;
+        }
+        nav {
+            height: 5em;
+            line-height: 5em;
+        }
+        nav .brand-logo {
+            font-size: 4em;
+            font-family: 'Cookie', cursive;
+            margin-left: 150px;
+        }
+        nav li {
+            line-height: 5em;
+        }
+        main {
+            margin-top: 5em;
+        }
+
+        @media only screen and (max-height: 400px) {
+            .navbar-fixed nav {
+                position: relative;
+            }
+            main {
+                margin: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="preloader-background">
+<div class="preloader-wrapper big active">
+    <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+            <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+            <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+            <div class="circle"></div>
+        </div>
+    </div>
+</div>
+<div class="big active" id="preloader-not-found-data" style="display: none">
+    <h5>Failed to find data.</h5>
+</div>
+</div>
+
+
+<input type="text" id="currentUserScreenName" value="{{ me }}" style="display: none;">
+<div class="navbar-fixed">
+<nav class="blue darken-1">
+    <a href="https://github.com/you"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+    
+    <a href="/"><div class="brand-logo">Tweelyser</div></a>
+    <div class="nav-wrapper lighten-1 right hand-on-med-down">
+    <ul>
+        <li>
+            <input type="text" id="screenNameInput" placeholder="@{{ me }}">
+        </li>
+        <li>
+            <a href="/logout" class="waves-effect waves-light white black-text btn">Logout</a>
+        </li>
+    </ul>
+    </div>
+</nav>
+</div>
+
+
+<main class="container">
+
+	<div class="row valign-wrapper">
+
+		<div class="col l3 m3 s12 valign">
+			
+			<div class="card hoverable z-depth-4 white" id="profileCard">
+				<div class="card-image">
+					<img id="userProfilePic">
+					<span class="card-title" id="screenName" style="background-color: rgba(0,0,0, 0.4); width: 100%"></span>
+				</div>
+				<div class="card-content" id="userName"></div>
+			</div>
+
+		</div>
+		<div class="col l9 m9 s12" style="padding: 0">
+			<div class="card hoverable z-depth-2 white">
+                <div class="card-content" style="padding-right: 0; padding-left: 0">
+                    <span class="card-title"><span id="getTimeOfDay">Loading...</span></span>
+                </div>
+                <div class="card-content blue darken-4 white-text" style="font-size: larger">Tweets according to time of day</div>
+            </div>
+
+		</div>
+	</div>
+    <div class="row valign-wrapper">
+        <div class="col l3 valign">
+			
+			<div class="card hoverable z-depth-2 white" id="personNatureCard" style='cursor:"pointer"'>
+				<div class="card-content">
+					<span class="card-title"><span id="personNature">Loading...</span></span>
+				</div>
+				<div class="card-content purple darken-4 white-text">Your activeness based on your Tweets</div>
+			</div>
+
+		</div>
+
+		<div class="col l3 valign">
+			
+			<div class="card hoverable z-depth-2 white">
+				<div class="card-content">
+					<span class="card-title"><span id="followersToFollowing">Loading...</span></span>
+				</div>
+				<div class="card-content red darken-4 white-text" style="font-size: larger">Followers to Following</div>
+			</div>
+
+		</div>
+		<!--<div class="col l1 valign"></div>-->
+
+		<div class="col l3 valign">
+			
+			<div class="card hoverable z-depth-2 white">
+				<div class="card-content">
+					<span class="card-title"><span id="hashtagFrequency">Loading...</span></span>
+				</div>
+				<div class="card-content purple darken-4 white-text" style="font-size: larger">Hashtag Frequency</div>
+			</div>
+
+		</div>
+		<!--<div class="col l1 valign"></div>-->
+
+		<div class="col l3 valign">
+			
+			<div class="card hoverable z-depth-2 white">
+				<div class="card-content">
+					<span class="card-title"><span id="tweetsWithMedia">Loading...</span></span>
+				</div>
+				<div class="card-content teal darken-4 white-text" style="font-size: larger">Percent of tweets containing Media</div>
+			</div>
+
+		</div>
+
+    </div>
+    <div class="row">
+
+		<div class="col l12 z-depth-2 card hoverable" style="padding: 0">
+			<div id="retweetsvsfav">Loading...</div>
+			<div class="card-content red darken-4 white-text" style="font-size: larger">Retweets vs Favorites for your tweets</div>
+		</div>
+
+    </div>
+    <div class="row">
+
+		<div class="col l5 z-depth-2 hoverable card" style="padding: 0">
+			<div class="card-content">
+				<span class="card-title"><span id="maxRetweet">Loading...</span></span>
+			</div>
+			<div class="card-content blue darken-4 white-text" style="font-size: larger">Max retweets for a single tweet</div>
+		</div>
+		<div class="col l1"></div>
+
+		<div class="col l6 z-depth-2 card hoverable" style="padding: 0">
+			<div id="tweetLength">Loading...</div>
+			<div class="card-content pink darken-4 white-text" style="font-size: larger">Character Count of Tweets</div>
+		</div>
+
+		
+    </div>
+    <div class="row">
+
+		<div class="col l12 z-depth-2 card hoverable" style="padding: 0">
+			<div id="timeBetweenTweets">Loading...</div>
+			<div class="card-content indigo darken-4 white-text" style="font-size: larger">Time between two consecutive tweets</div>
+		</div>
+
+	</div>
+
+</main>
+
+<footer class="page-footer blue darken-1">
+    <center>
+        <a class="white-text center" href="https://github.com/himanshub16/tweelyser" style="text-decoration: underline">
+            Fork it on GitHub.
+        </a>
+    </center>        
+    <div class="clearfix"></div>
+</footer>
+
+<script>
+    function loadJsFile (src, async) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.type = "text/javascript";
+        s.async = async;                                 // <-- this is important
+        document.getElementsByTagName('head')[0].appendChild(s);
+    }
+
+    var jsList = [
+        'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js',
+        '/static/application.js'
+    ];
+
+    for (var i = 0; i < jsList.length; i++) {
+        loadJsFile(jsList[i], false);
+    }
+</script>
+
+</body>
+</html>

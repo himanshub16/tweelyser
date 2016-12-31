@@ -1,0 +1,110 @@
+<html>
+<head>
+    <title>Tweelyer : Analytics for your Twitter profile</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <script href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <style> 
+        body {
+            margin: 0;
+            padding: 0;
+            /*background: url({{ url_for('static', filename='home.jpg') }});
+            background-size: cover;*/
+        }
+        .clearfix {
+            min-height: 10px;
+            width: 100%;
+            display: block;
+        }
+        nav {
+            height: 5em;
+            line-height: 5em;
+        }
+        nav .brand-logo {
+            font-size: 4em;
+            font-family: 'Cookie', cursive;
+            /*margin-left: 150px; not required on this page*/
+        }
+        section {
+            width: 100%;
+            height: calc(100% - 5em);
+        }
+        footer {
+            height: 200px;
+            width: 100%;
+            bottom: 0;
+            position: fixed;
+        }
+        footer div {
+            background-image: url('/static/footer.png');
+            background-size: cover;
+            height: 100%;
+            bottom: 0;
+        }
+        .myblue {
+            background-color: #4198ff !important;
+        }
+
+        @media only screen and (max-height: 300px) {
+            footer {
+                display: none;
+            }
+        }
+
+        @media only screen and (max-height: 460px) {
+            footer {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body color="myblue">
+
+<nav>
+    <div class="nav-wrapper myblue"> 
+        <a href="https://github.com/you"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+
+        <a href="/" class="brand-logo center">Tweelyser</a>
+        <div class="clearfix"></div>
+    </div>
+</nav>
+
+<section class="valign-wrapper myblue">
+    <div class="valign container row" style="margin-top: -100px;">
+        <div class="col l8 m8 s12 white-text" style="font-family: 'Satisfy', cursive; font-size: 3em;">Analytics  for  your  Twitter  profile .</div>
+        <div class="col l4 m4 s12 btn-large waves-effect waves-light white black-text z-depth-3" id="loginBtn">
+            <i class="material-icons left"></i>CONTINUE WITH TWITTER
+        </div>
+    </div>
+</section>
+
+<footer class="myblue">
+    <div></div>
+</footer>
+
+<script>
+    var btn = document.getElementById("loginBtn");
+    btn.onclick = function() {
+        var w = window.open("{{ url_for('oauth_twitter') }}", '', 'height=400, width=500');
+        var intervalId = setInterval(function() {
+            text = w.document.body.innerText;
+            if (text.trim() == "success") {
+                w.close();
+                location.pathname = 'results';
+            } else if (text.trim() == "failed" || text.trim() == "Cannot connect to Twitter.") {
+                w.close();
+                alert("Login failed. Please try again.");
+                clearInterval(intervalId);
+            }
+            console.log("checked" + text);
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
