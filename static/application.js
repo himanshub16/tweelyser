@@ -330,7 +330,7 @@ function getUserData(screen_name) {
 
 			$('#userName').text(USER_INFO.name);
 			$('#screenName').text("@"+USER_INFO.screen_name);
-			$('#userProfilePic').attr('src', USER_INFO.profile_image_url.replace("_normal", ''));
+			$('#userProfilePic').attr('src', USER_INFO.profile_image_url_https.replace("_normal", ''));
 			$('#followersToFollowing').text(ratio.toString());
 		},
 
