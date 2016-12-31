@@ -1,0 +1,11 @@
+{
+  "name": "Tweelyser",
+  "description": "Analytics on your Twitter account",
+  "keywords": [
+    "flask",
+    "python",
+    "twitter"
+  ],
+  "repository": "https://github.com/himanshub16/tweelyser",
+  "addons": [ ]
+}
