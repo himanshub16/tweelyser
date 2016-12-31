@@ -8,4 +8,4 @@ oauthlib==2.0.1
 requests==2.12.4
 requests-oauthlib==0.7.0
 Werkzeug==0.11.13
-gunicorn==19.7.0
+gunicorn==19.6.0
