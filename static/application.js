@@ -72,6 +72,84 @@ var TWEETS_WITHOUT_MEDIA = 0;
 
 var TIME_GAP_BETWEEN_TWEETS = [];
 
+// reset all variables
+function resetVariables() {
+	totalItems = 12; // total analysis dones
+	rendered = 0; // count of items/charts whose rendering is complete
+
+	// verbose list of tweet objects most recent tweets by the user (includes retweets) : max 200
+	TWEET_LIST = null;
+
+	TWEET_RETWEET_COUNT_LIST = null;
+	TWEET_FAVORITE_COUNT_LIST = null;
+	TWEET_DATE_LIST = null;
+
+	USER_INFO = null;
+	FOLLOWER_COUNT = 0; 
+	FOLLOWING_COUNT = 0;
+
+
+	// verbose list of tweet objects of retweets by the user
+	RETWEET_LIST = null;
+
+	// list of followers (id)
+	FOLLOWER_LIST = null;
+
+	// list of followings (id)
+	FOLLOWING_LIST = null;
+
+	// categorisation of tweet with time of day (0-11) 2 hour interval
+	TWEET_WITH_TIME_OF_DAY = {
+		"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0
+	};
+
+	TWEET_WITH_TIME_OF_DAY_ARRAY = [
+		{ "interval": "0", "tweet_count": 0 },
+		{ "interval": "1", "tweet_count": 0 },
+		{ "interval": "2", "tweet_count": 0 },
+		{ "interval": "3", "tweet_count": 0 },
+		{ "interval": "4", "tweet_count": 0 },
+		{ "interval": "5", "tweet_count": 0 },
+		{ "interval": "6", "tweet_count": 0 },
+		{ "interval": "7", "tweet_count": 0 },
+		{ "interval": "8", "tweet_count": 0 },
+		{ "interval": "9", "tweet_count": 0 },
+		{ "interval": "10", "tweet_count": 0 },
+		{ "interval": "11", "tweet_count": 0 }
+	];
+
+	// tweet with max retweets (1)
+	TWEET_WITH_MAX_RETWEETS = null;
+
+	// top three tweets based on no of likes
+	TOP_THREE_TWEETS_FAV = null;
+
+	// average mentions made by me (includes tweets which have some mention)
+	MENTION_FREQUENCY = null;
+
+	// average hashtags used by me (all tweets)
+	HASHTAGS_FREQUENCY_ALL = null;
+
+	// average hashtags used by me (only ones containing hashtags)
+	HASHTAGS_FREQUENCY = null;
+
+	// top 3 people mentioned the most by me (their user id)
+	PEOPLE_MENTIONED_THE_MOST_BY_ME = null;
+
+
+	// categorisation of tweets on the basis of their length
+	TWEET_LENGTH_LIST = {
+		"0-30":0, "30-50": 0, "50-100": 0, "100-120": 0, "120-140": 0
+	};
+
+	// tweets with-without media
+	TWEETS_WITH_MEDIA = 0;
+	TWEETS_WITHOUT_MEDIA = 0;
+
+	TIME_GAP_BETWEEN_TWEETS = [];
+
+}
+
 
 // create dummy elements to hold data
 function createHiddenElement(id) {
@@ -218,7 +296,13 @@ function getTweets(screen_name) {
 	xhr = $.ajax({
 		url: "/show/"+screen_name,
 		success: function(data, status, xhr) {
-			TWEET_LIST = xhr.responseJSON;
+			try {
+				TWEET_LIST = xhr.responseJSON;
+			} catch (TypeError) {
+				failedToFind();
+				rendered -= 1;
+				return ;
+			}
 			TWEET_RETWEET_COUNT_LIST = [];
 			TWEET_FAVORITE_COUNT_LIST = [];
 
@@ -323,7 +407,13 @@ function getUserData(screen_name) {
 	xhr = $.ajax({
 		url: "/lookup/"+screen_name,
 		success: function(data, status, xhr) {
-			USER_INFO = xhr.responseJSON[0];
+			try {
+				USER_INFO = xhr.responseJSON[0];
+			} catch (TypeError) {
+				failedToFind();
+				rendered -= 1;
+				return;
+			}
 			var followers = USER_INFO.followers_count; 
 			var following = USER_INFO.friends_count;
 			var ratio = (followers/following).toFixed(2);
@@ -370,10 +460,15 @@ function getCookie(cname) {
 
 function refreshData(username) {
 	rendered = 0;
+	resetVariables();
 	showLoaders();
 	console.log("fetching data for " + username);
-	getUserData(username);
-	getTweets(username);
+	try {
+		getUserData(username);
+		getTweets(username);
+	} catch (TypeError) {
+		console.log("Error occured");
+	}
 }
 
 document.getElementById("screenNameInput")
