@@ -55,7 +55,6 @@ def oauth_twitter_callback():
         else:
             return 'failed'
     except Exception:
-        raise
         return "failed"
 
 
@@ -78,6 +77,7 @@ def results(name=None):
     """
     try:
         if not name:
+            test = session.get('token')
             name = session.get('me')
         return render_template("results.html", me=name)
     except KeyError:
