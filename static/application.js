@@ -494,6 +494,7 @@ function refreshData(username) {
 	resetVariables();
 	showLoaders();
 	console.log("fetching data for " + username);
+	window.scrollTo(0, 0);
 	try {
 		getUserData(username);
 		getTweets(username);
