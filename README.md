@@ -1,12 +1,16 @@
 #Tweelyzer
 
+A `Flask` web-app to display analytics based on a particular users' Twitter profile.
+User can analyse any profile for public data, as permitted by Twitter REST API (which restricts access to protected accounts).
 
-- A Flask Web App that uses Public Data accessed using Twitter API and visualizes the data using the d3.js framework.
+The number of API requests are limited within a time-frame. It is therefore requested to generate your own API key from [Twitter developer site](https://developer.twitter.com).
 
-- We show various usage statistics of any twitter user like their most active hours, the number of hashtags per tweet, the ratio
-of retweets and favorites of each their tweets and much more.
+For contributing, a basic initial setup is required to contribute to this `Flask` project.
 
-- Also the app is real time i.e. any live tweet is added to the statistic calculation.
+    git clone https://github.com/himanshub16/tweelyser.git
+    cd tweelyser
+    virtualenv -p /usr/bin/python venv
+    source venv/bin/activate
+    pip install -r requirements.txt 
 
-- The data is visualised using the d3.js framework and every chart is interactive to provide an intuitive user experience.
-
+Run the `app.py` file any time you want to test the app.
