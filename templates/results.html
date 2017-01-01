@@ -51,6 +51,15 @@
             margin-top: 5em;
         }
 
+        #unicode-heart {
+            color: red;
+            cursor: pointer;
+            /* font-size: 1.5em; */
+            display: inline-block;
+            animation: shiver 1s ease-in-out infinite;
+            animation-direction: alternate;
+        }
+
         @media only screen and (max-height: 400px) {
             .navbar-fixed nav {
                 position: relative;
@@ -229,13 +238,35 @@
 
 </main>
 
-<footer class="page-footer blue darken-1">
-    <center>
-        <a class="white-text center" href="https://github.com/himanshub16/tweelyser" style="text-decoration: underline">
-            Fork it on GitHub.
-        </a>
-    </center>        
-    <div class="clearfix"></div>
+<footer class="page-footer blue darken-2">
+    <div class="container">
+    <div class="row" style="margin-bottom: 0;">
+        <div class="col l6 s12">
+        <h5 class="white-text">Footer Content</h5>
+        <p class="grey-text text-lighten-4">
+            The analysis is based on latest 200 tweets, to avoid slowing down while fetching data from Twitter. 
+            <br>
+            The data is fetched from Twitter API. The developer claim no responsibility of any interpretations, misuse, validity of this data.
+            <br>
+            The privacy and security is handled by Twitter. Your personal data is not stored.
+        </p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+        <ul>
+            <li><a class="grey-text text-lighten-3" href="https://github.com/himanshub16/tweelyser">GitHub</a></li>
+            <li>
+                <span id="india" class="grey-text text-lighten-3">
+                    <span>With</span>
+                    <span id="unicode-heart">❤</span>
+                    <span>from India</span>
+                </span>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </div>
+    <div class="footer-copyright">
+    </div>
 </footer>
 
 <script>

@@ -274,10 +274,10 @@ function tweetActivity() {
 	    data: {
 	        // iris data from R
 	        columns: [
-	            ['Morning (6 AM to 10 AM) : Early riser', TWEET_WITH_INTERVAL_OF_DAY.morning 	],
-	            ['Day (10 AM to 4 PM) : Office hours', 	TWEET_WITH_INTERVAL_OF_DAY.day 		], 
-	            ['Evening (4 PM to 9 PM) : After office', TWEET_WITH_INTERVAL_OF_DAY.evening	],
-	            ['Night (9 PM to 6 AM) : Night owl', 	TWEET_WITH_INTERVAL_OF_DAY.night 	]	
+	            ['Early riser (6 AM to 10 AM)',  TWEET_WITH_INTERVAL_OF_DAY.morning ],
+	            ['Office hours (10 AM to 4 PM)', TWEET_WITH_INTERVAL_OF_DAY.day 	], 
+	            ['After office (4 PM to 9 PM)',  TWEET_WITH_INTERVAL_OF_DAY.evening	],
+	            ['Night owl (9 PM to 6 AM)', 	 TWEET_WITH_INTERVAL_OF_DAY.night 	]	
 	        ],
 	        type : 'pie'
 	    }

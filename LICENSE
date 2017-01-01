@@ -19,3 +19,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+The analysis is based on latest 200 tweets, to avoid slowing down while fetching data from Twitter. 
+The data is fetched from Twitter API. The developer claim no responsibility of any interpretations, misuse, validity of this data.
+The privacy and security is handled by Twitter. Your personal data is not stored.
