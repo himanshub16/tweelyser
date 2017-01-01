@@ -27,6 +27,10 @@ var TWEET_WITH_TIME_OF_DAY = {
 	"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0
 };
 
+var TWEET_WITH_INTERVAL_OF_DAY = {
+	"morning":0, "day":0, "evening":0, "night":0
+}
+
 var TWEET_WITH_TIME_OF_DAY_ARRAY = [
 	{ "interval": "0", "tweet_count": 0 },
 	{ "interval": "1", "tweet_count": 0 },
@@ -102,6 +106,10 @@ function resetVariables() {
 	TWEET_WITH_TIME_OF_DAY = {
 		"0": 0, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0
 	};
+
+	var TWEET_WITH_INTERVAL_OF_DAY = {
+		"morning":0, "day":0, "evening":0, "night":0
+	}
 
 	TWEET_WITH_TIME_OF_DAY_ARRAY = [
 		{ "interval": "0", "tweet_count": 0 },
@@ -254,10 +262,24 @@ function tweetLength() {
 	            ['100-120', TWEET_LENGTH_LIST["100-120"] ],
 	            ['120-150', TWEET_LENGTH_LIST["120-140"] ]	
 	        ],
-	        type : 'pie',
-	        onclick: function (d, i) {  },
-	        onmouseover: function (d, i) {  },
-	        onmouseout: function (d, i) { }
+	        type : 'pie'
+	    }
+	});
+}
+
+//Pie 
+function tweetActivity() {
+	var chart = c3.generate({
+		bindto: "#tweetActivity",
+	    data: {
+	        // iris data from R
+	        columns: [
+	            ['Morning (6 AM to 10 AM) : Early riser', TWEET_WITH_INTERVAL_OF_DAY.morning 	],
+	            ['Day (10 AM to 4 PM) : Office hours', 	TWEET_WITH_INTERVAL_OF_DAY.day 		], 
+	            ['Evening (4 PM to 9 PM) : After office', TWEET_WITH_INTERVAL_OF_DAY.evening	],
+	            ['Night (9 PM to 6 AM) : Night owl', 	TWEET_WITH_INTERVAL_OF_DAY.night 	]	
+	        ],
+	        type : 'pie'
 	    }
 	});
 }
@@ -327,7 +349,10 @@ function getTweets(screen_name) {
 				TWEET_WITH_TIME_OF_DAY_ARRAY[~~(hour/2)].tweet_count ++;
 
 				// predict nature of person with tweet activiy
-
+				if (hour > 6 && hour < 10) TWEET_WITH_INTERVAL_OF_DAY.morning++;
+				else if (hour >= 10 && hour < 14) TWEET_WITH_INTERVAL_OF_DAY.day++;
+				else if (hour >= 14 && hour < 21) TWEET_WITH_INTERVAL_OF_DAY.evening++;
+				else TWEET_WITH_INTERVAL_OF_DAY.night++;
 
 				if (TWEET_LIST[i].retweet_count >= max_retweet.count) {
 					max_retweet.count++;
@@ -394,6 +419,7 @@ function getTweets(screen_name) {
 			getTweetsWithMedia();
 			getTweeetWithMaxRetweets();
 			tweetLength();
+			tweetActivity();
 			timeBetweenTweets();
 			rendered += 8;
 
@@ -422,6 +448,11 @@ function getUserData(screen_name) {
 			$('#screenName').text("@"+USER_INFO.screen_name);
 			$('#userProfilePic').attr('src', USER_INFO.profile_image_url_https.replace("_normal", ''));
 			$('#followersToFollowing').text(ratio.toString());
+			$("#tweetCount").text(USER_INFO.statuses_count.toString());
+			// var d = new Date(Date.parse(USER_INFO.created_at));
+			$("#usingTwitterSince").text( (new Date(Date.parse(USER_INFO.created_at))).toLocaleDateString() );
+			$("#followerCount").text(followers.toString());
+			$("#followingCount").text(following.toString());
 		},
 
 		complete: function() {

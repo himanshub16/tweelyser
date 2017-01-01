@@ -103,80 +103,112 @@
 </nav>
 </div>
 
+<div class="clearfix"></div>
 
 <main class="container">
 
-	<div class="row valign-wrapper">
+	<div class="row">
 
-		<div class="col l3 m3 s12 valign">
-			
-			<div class="card hoverable z-depth-4 white" id="profileCard">
-				<div class="card-image">
-					<img id="userProfilePic">
-					<span class="card-title" id="screenName" style="background-color: rgba(0,0,0, 0.4); width: 100%"></span>
-				</div>
-				<div class="card-content" id="userName"></div>
-			</div>
+		<div class="col l3 row" style="cursor: pointer;">
+            <div class="col l12" style="padding-left: 0; padding-right: 0">
+                <div class="card hoverable z-depth-4 white" id="profileCard">
+                    <div class="card-image">
+                        <img id="userProfilePic">
+                        <span class="card-title" id="screenName" style="background-color: rgba(0,0,0, 0.4); width: 100%"></span>
+                    </div>
+                    <div class="card-content" id="userName"></div>
+                </div>
+            </div>
+
+            <ul class="col l12 collection card hoverable z-depth-4 white">  
+                <li class="collection-item">
+                    <b>Using Twitter since </b> <span id="usingTwitterSince"></span>
+                </li>
+                <li class="collection-item">
+                    <b>Total Tweets </b> <span class="right" id="tweetCount"></span>
+                </li>
+                <li class="collection-item">
+                    <b>Followers </b> <span class="right" id="followerCount"></span>
+                </li>
+                <li class="collection-item">
+                    <b>Following </b> <span class="right" id="followingCount"></span>
+                </li>
+            </ul>
 
 		</div>
-		<div class="col l9 m9 s12" style="padding: 0">
-			<div class="card hoverable z-depth-2 white">
+        <div class="col l9 row">
+            <div class="col l4">
+                
+                <div class="card hoverable z-depth-2 white">
+                    <div class="card-content">
+                        <span class="card-title"><span id="followersToFollowing">Loading...</span></span>
+                    </div>
+                    <div class="card-content red darken-4 white-text" style="font-size: larger">Followers to Following</div>
+                </div>
+
+            </div>
+
+            <div class="col l4">
+                
+                <div class="card hoverable z-depth-2 white">
+                    <div class="card-content">
+                        <span class="card-title"><span id="hashtagFrequency">Loading...</span></span>
+                    </div>
+                    <div class="card-content purple darken-4 white-text" style="font-size: larger">Hashtag Frequency</div>
+                </div>
+
+            </div>
+
+            <div class="col l4">
+                
+                <div class="card hoverable z-depth-2 white">
+                    <div class="card-content">
+                        <span class="card-title"><span id="tweetsWithMedia">Loading...</span></span>
+                    </div>
+                    <div class="card-content teal darken-4 white-text" style="font-size: larger">Tweets with media</div>
+                </div>
+
+            </div>
+            <div class="col l12">
+                <div class="z-depth-2 hoverable card card-horizontal white">
+                    <div class="card-content blue darken-4 white-text" style="font-size: larger">Recently trending</div>
+                    <div class="card-content">
+                        <span class="card-title"><span id="maxRetweet" style="font-size: normal">Loading...</span></span>
+                    </div>
+            
+                </div>
+            </div>
+        </div>
+	</div>
+    <div class="row valign-wrapper">
+        <div class="col l12 valign">
+            <div class="card hoverable z-depth-2 white">
                 <div class="card-content" style="padding-right: 0; padding-left: 0">
                     <span class="card-title"><span id="getTimeOfDay">Loading...</span></span>
                 </div>
                 <div class="card-content blue darken-4 white-text" style="font-size: larger">Tweets according to time of day</div>
             </div>
-
-		</div>
-	</div>
-    <div class="row valign-wrapper">
-        <div class="col l3 valign">
-			
-			<div class="card hoverable z-depth-2 white" id="personNatureCard" style='cursor:"pointer"'>
-				<div class="card-content">
-					<span class="card-title"><span id="personNature">Loading...</span></span>
-				</div>
-				<div class="card-content purple darken-4 white-text">Your activeness based on your Tweets</div>
-			</div>
-
-		</div>
-
-		<div class="col l3 valign">
-			
-			<div class="card hoverable z-depth-2 white">
-				<div class="card-content">
-					<span class="card-title"><span id="followersToFollowing">Loading...</span></span>
-				</div>
-				<div class="card-content red darken-4 white-text" style="font-size: larger">Followers to Following</div>
-			</div>
-
-		</div>
-		<!--<div class="col l1 valign"></div>-->
-
-		<div class="col l3 valign">
-			
-			<div class="card hoverable z-depth-2 white">
-				<div class="card-content">
-					<span class="card-title"><span id="hashtagFrequency">Loading...</span></span>
-				</div>
-				<div class="card-content purple darken-4 white-text" style="font-size: larger">Hashtag Frequency</div>
-			</div>
-
-		</div>
-		<!--<div class="col l1 valign"></div>-->
-
-		<div class="col l3 valign">
-			
-			<div class="card hoverable z-depth-2 white">
-				<div class="card-content">
-					<span class="card-title"><span id="tweetsWithMedia">Loading...</span></span>
-				</div>
-				<div class="card-content teal darken-4 white-text" style="font-size: larger">Percent of tweets containing Media</div>
-			</div>
-
-		</div>
-
+        </div>
     </div>
+   
+    <div class="row">
+
+        <div class="col l6">
+            <div class="z-depth-2 card hoverable">
+                <div id="tweetActivity">Loading...</div>
+                <div class="card-content teal darken-3 white-text" style="font-size: larger">Activity hours</div>
+            </div>
+        </div>
+
+        <div class="col l6">
+            <div class="z-depth-2 card hoverable">
+                <div id="tweetLength">Loading...</div>
+                <div class="card-content pink darken-4 white-text" style="font-size: larger">Character Count of Tweets</div>
+            </div>
+        </div>
+		
+    </div>
+
     <div class="row">
 
 		<div class="col l12 z-depth-2 card hoverable" style="padding: 0">
@@ -185,23 +217,7 @@
 		</div>
 
     </div>
-    <div class="row">
-
-		<div class="col l5 z-depth-2 hoverable card" style="padding: 0">
-			<div class="card-content">
-				<span class="card-title"><span id="maxRetweet">Loading...</span></span>
-			</div>
-			<div class="card-content blue darken-4 white-text" style="font-size: larger">Max retweets for a single tweet</div>
-		</div>
-		<div class="col l1"></div>
-
-		<div class="col l6 z-depth-2 card hoverable" style="padding: 0">
-			<div id="tweetLength">Loading...</div>
-			<div class="card-content pink darken-4 white-text" style="font-size: larger">Character Count of Tweets</div>
-		</div>
-
-		
-    </div>
+   
     <div class="row">
 
 		<div class="col l12 z-depth-2 card hoverable" style="padding: 0">
