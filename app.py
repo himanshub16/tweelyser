@@ -65,6 +65,7 @@ def logout():
     """
     try:
         session.pop('token', None)
+        session.pop('me', None)
     except KeyError:
         pass
     return redirect(url_for('index'))
