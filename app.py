@@ -76,10 +76,14 @@ def results(name=None):
     """ Show results
     """
     try:
+        me = session.get('me')
         if not name:
-            test = session.get('token')
-            name = session.get('me')
-        return render_template("results.html", me=name)
+            name = me
+        if oauth_twitter_token():
+            login = False
+        else:
+            login = True
+        return render_template("results.html", user=name, me=me, login=login)
     except KeyError:
         return redirect(url_for('index'))
 

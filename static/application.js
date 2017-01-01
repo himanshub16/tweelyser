@@ -490,6 +490,9 @@ function getCookie(cname) {
 }
 
 function refreshData(username) {
+	if (username === undefined) {
+		username = document.getElementById("currentUserScreenName").value;
+	}
 	rendered = 0;
 	resetVariables();
 	showLoaders();
@@ -538,4 +541,4 @@ function failedToFind() {
 	$('#preloader-not-found-data').fadeIn('slow');
 }
 
-refreshData(document.getElementById("currentUserScreenName").value);
+refreshData();
