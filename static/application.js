@@ -1,11 +1,14 @@
 var totalItems = 12; // total analysis dones
 var rendered = 0; // count of items/charts whose rendering is complete
 
+var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 // verbose list of tweet objects most recent tweets by the user (includes retweets) : max 200
 var TWEET_LIST = null;
 
-var TWEET_RETWEET_COUNT_LIST = null;
-var TWEET_FAVORITE_COUNT_LIST = null;
 var TWEET_DATE_LIST = null;
 
 var USER_INFO = null;
@@ -75,6 +78,10 @@ var TWEETS_WITH_MEDIA = 0;
 var TWEETS_WITHOUT_MEDIA = 0;
 
 var TIME_GAP_BETWEEN_TWEETS = [];
+var TWEET_RETWEET_FAV_COUNT_LIST = [];
+
+
+
 
 // reset all variables
 function resetVariables() {
@@ -84,8 +91,6 @@ function resetVariables() {
 	// verbose list of tweet objects most recent tweets by the user (includes retweets) : max 200
 	TWEET_LIST = null;
 
-	TWEET_RETWEET_COUNT_LIST = null;
-	TWEET_FAVORITE_COUNT_LIST = null;
 	TWEET_DATE_LIST = null;
 
 	USER_INFO = null;
@@ -155,7 +160,12 @@ function resetVariables() {
 	TWEETS_WITHOUT_MEDIA = 0;
 
 	TIME_GAP_BETWEEN_TWEETS = [];
+	TWEET_RETWEET_FAV_COUNT_LIST = [];
 
+	$("#hashtagFreqDataCount").text("");
+	$("#tweetsWithMediaCount").text("");
+	$("tweetWithTimeOfDayCount").text("");
+	$("timeGapBetweenTweetsCount").text("");
 }
 
 
@@ -171,86 +181,116 @@ function getTweeetWithMaxRetweets() {
 	$('#maxRetweet').html(TWEET_WITH_MAX_RETWEETS.text);
 }
 
-function findNatureFromTweets() {
-	var day = 0, night = 0;
-	for (var i = 0; i < 6; i++) {
-		if (i < 6)
-			day += TWEET_WITH_TIME_OF_DAY[i];
-		else
-			night += TWEET_WITH_TIME_OF_DAY[i];
-	}
-	if (day >= night) {
-		$("#personNature").text("Early bird.");
-		$("#personNatureCard").attr('title', (day*100 / (day + night)) + " % tweets were within day hours.");
-	}
-	else {
-		$("#personNature").text("Night owl.");
-		$("#personNatureCard").attr('title', (night*100 / (day + night)) + " % tweets were made during nights.");
-	}
-}
-
-
 function getTweetsWithMedia() {
 	$('#tweetsWithMedia').text(((TWEETS_WITH_MEDIA/(TWEETS_WITHOUT_MEDIA + TWEETS_WITH_MEDIA))*100).toFixed(2).toString() + " %")
+	$("#tweetsWithMediaCount").text(TWEET_LIST.length);
 }
 
 //Bar Graph
 function retweetVsFavorites() {
-	var retweets = TWEET_RETWEET_COUNT_LIST.slice(0, 50);
-	var favorites = TWEET_FAVORITE_COUNT_LIST.slice(0, 50);
-	retweets.unshift('Retweets');
-	favorites.unshift('Favorites');
+	$("#retweetsvsfavCount").text(TWEET_RETWEET_FAV_COUNT_LIST.length);
 	var chart = c3.generate({
 		bindto: "#retweetsvsfav",
 	    data: {
-	        columns: [
-	            retweets,
-	            favorites
-	        ],	
+	        json: TWEET_RETWEET_FAV_COUNT_LIST,
+			keys: {
+				"value": [ "retweets", "favorites" ]
+			},
+			onclick: function(d) {
+				tweet = TWEET_RETWEET_FAV_COUNT_LIST[d.index];
+				showBottomPopup("Retweets vs Favorites", ["Retweets : " + tweet.retweets + "  Favorites : " + 
+					 tweet.favorites.toString()], [tweet.link], tweet.content);
+			},
 	        type: 'bar'
 	    },
 	    bar: {
 	        width: {
-	            ratio: 0.5 // this makes bar width 50% of length between ticks
+	            ratio: 0.8 // this makes bar width 50% of length between ticks
 	        }
-	        // or
-	        //width: 100 // this makes bar width 100px
-	    }
+	    },
+		tooltip: {
+			format: {
+				title: function (d) { return '# ' + d; }
+			}
+		},
+		zoom: {
+			enabled: true
+		}
 	});
 }
 
 function timeBetweenTweets() {
-	var dataSet = TIME_GAP_BETWEEN_TWEETS.slice(0,100);
-	dataSet.unshift("Count");
+	$("#timeGapBetweeenTweetsCount").text(TIME_GAP_BETWEEN_TWEETS.length + 1); // that's intentional 
+	// finding out which attribute should be shown initially 
+	var zeroHours = TIME_GAP_BETWEEN_TWEETS.filter(function(o) { return (o.gapHours < 0.5); }).length;
+	var zeroMinutes = TIME_GAP_BETWEEN_TWEETS.filter(function(o) { return (o.gapMinutes < 0.5); }).length;
+	var zeroDays = TIME_GAP_BETWEEN_TWEETS.filter(function(o) { return (o.gapDays < 0.5); }).length;
+	console.log(zeroHours, zeroMinutes, zeroDays);
+	var hidden = null;
+	switch(Math.max(...[zeroHours, zeroDays, zeroMinutes])) {
+		case zeroHours: hidden = ["gapDays", "gapMinutes"]; break;
+		case zeroMinutes: hidden = ["gapDays", "gapHours"]; break;
+		case zeroDays: hidden = ["gapHours", "gapMinutes"]; break;
+		default: console.log("fucked up");
+	}
+	console.log(hidden);
 	var chart = c3.generate({
-	bindto: "#timeBetweenTweets",
-    data: {
-        // xs: {
-        //     setosa: 'setosa_x',
-        //     versicolor: 'versicolor_x',
-        // },
-        // iris data from R
-        columns: [
-        	dataSet
-        ],
-        type: 'scatter'
-    },
-    axis: {
-        x: {
-            label: 'Tweet index',
-            tick: {
-                fit: false
-            }
-        },
-        y: {
-            label: 'Hours Between Tweets'
-        }
-    }
-});
+		bindto: "#timeBetweenTweets",
+		data: {
+			json: TIME_GAP_BETWEEN_TWEETS,
+			keys: {
+				"value": [ "gapHours", "gapMinutes", "gapDays" ]
+			},
+			type: 'scatter',
+			names: {
+				gapHours: "In hours",
+				gapMinutes: "In minutes",
+				gapDays: "In days"
+			},
+			hide: hidden,
+			onclick: function(d) {
+				var obj = TIME_GAP_BETWEEN_TWEETS[d.index];
+				var content = "<p>"+obj.tweet1+"</p>" + "<div class='clearfix'></div><div class='divider'></div><div class='clearfix'></div>" + "<p>"+obj.tweet2+"</p>";
+				var subheading = obj.time1 + "<div class='clearfix'></div><div class='divider'></div><div class='clearfix'></div>" + obj.time2;
+				showBottomPopup("Time between successive tweets", [obj.time1, obj.time2], [obj.link1, obj.link2], content);
+				console.log(d);
+			}
+		},
+		axis: {
+			x: {
+				label: 'Tweet index',
+				tick: {
+					fit: true
+				}
+			},
+			y: {
+				label: 'Time Between Tweets'
+			}
+		},
+		tooltip: {
+			format: {
+				value: function(value, ratio, id) {
+					if (id === "gapHours")
+						return value + " hours";
+					else if (id === "gapMinutes")
+						return value + " minutes";
+					else if (id === "gapDays")
+						return value + " days";
+				},
+				title: function(x) {
+					return (x+1) + ' and ' + (x+2);
+				}
+			}
+		},
+		zoom: {
+			enabled: true
+		}
+	});
 }
 
 //Pie 
 function tweetLength() {
+	$("#characterCountCount").text(TWEET_LIST.length.toString());
 	var chart = c3.generate({
 		bindto: "#tweetLength",
 	    data: {
@@ -269,6 +309,7 @@ function tweetLength() {
 
 //Pie 
 function tweetActivity() {
+	$("#activityHoursCount").text(TWEET_LIST.length);
 	var chart = c3.generate({
 		bindto: "#tweetActivity",
 	    data: {
@@ -286,9 +327,9 @@ function tweetActivity() {
 
 //Line 
 function tweetWithTimeOfDayChart() {
+	$("#tweetWithTimeOfDayCount").text(TWEET_LIST.length);
 	var chart = c3.generate({
 	    bindto: '#getTimeOfDay',
-
 	    data: {
 		    columns: [
 		    		['Tweet count', TWEET_WITH_TIME_OF_DAY[0],TWEET_WITH_TIME_OF_DAY[1],TWEET_WITH_TIME_OF_DAY[2],
@@ -308,7 +349,8 @@ function tweetWithTimeOfDayChart() {
 }
 
 function setHashtagFreq() {
-	$('#hashtagFrequency').text(HASHTAGS_FREQUENCY.toFixed(2));
+	$('#hashtagFrequency').text(HASHTAGS_FREQUENCY.toFixed(2) + " (" + HASHTAGS_FREQUENCY_ALL.toFixed(2) + ") ");
+	$("#hashtagFreqDataCount").text(TWEET_LIST.length);
 }
 
 //
@@ -325,8 +367,6 @@ function getTweets(screen_name) {
 				rendered -= 1;
 				return ;
 			}
-			TWEET_RETWEET_COUNT_LIST = [];
-			TWEET_FAVORITE_COUNT_LIST = [];
 
 			var max_retweet = { "count": 0, "index": -1 };
 			var total_hashtags = 0, tweets_with_hashtags = 0;
@@ -361,8 +401,12 @@ function getTweets(screen_name) {
 
 				// get favorites and retweet count list 
 				if (TWEET_LIST[i].favorite_count !== 0) {
-					TWEET_RETWEET_COUNT_LIST.push( TWEET_LIST[i].retweet_count );
-					TWEET_FAVORITE_COUNT_LIST.push( TWEET_LIST[i].favorite_count );
+					TWEET_RETWEET_FAV_COUNT_LIST.push({ 
+						"content": TWEET_LIST[i].text, 
+						"retweets": TWEET_LIST[i].retweet_count,
+						"favorites": TWEET_LIST[i].favorite_count,
+						"link": "https://twitter.com/statuses/" + TWEET_LIST[i].id_str
+					});
 				}
 
 				// tweet filter based on tweet length
@@ -399,21 +443,31 @@ function getTweets(screen_name) {
 			// }
 
 			HASHTAGS_FREQUENCY = total_hashtags / tweets_with_hashtags;
+			HASHTAGS_FREQUENCY_ALL = total_hashtags / TWEET_LIST.length;
 
 			// get gap between tweets
 			TIME_GAP_BETWEEN_TWEETS = [];
 			for (var i = 1; i < TWEET_LIST.length; i++) {
-				var time1 = new Date(TWEET_LIST[i].created_at);
-				var time2 = new Date(TWEET_LIST[i-1].created_at);
+				var time1 = (new Date(TWEET_LIST[i].created_at));
+				var time2 = (new Date(TWEET_LIST[i-1].created_at));
 
-				TIME_GAP_BETWEEN_TWEETS.push(((time2.getTime() - time1.getTime())/(60000*60)).toFixed(2));
+				TIME_GAP_BETWEEN_TWEETS.push({
+					"time1": time1.toLocaleString(),
+					"time2": time2.toLocaleString(),
+					"gapMinutes": Number( ( (time2.getTime() - time1.getTime()) / (1000 * 60 ) ).toFixed(2) ),
+					"gapHours": Number( ( (time2.getTime() - time1.getTime()) / (1000 * 60 * 60) ).toFixed(2) ),
+					"gapDays": Number( ( (time2.getTime() - time1.getTime()) / (1000 * 60 * 60 * 24 ) ).toFixed(2) ),
+					"tweet1": TWEET_LIST[i].text,
+					"tweet2": TWEET_LIST[i-1].text,
+					"link1": "https://twitter.com/statuses/" + TWEET_LIST[i].id_str,
+					"link2": "https://twitter.com/statuses/" + TWEET_LIST[i-1].id_str
+				});
 			}
 		},
 
 		complete: function() {
 			console.log('ajax completed');
 			setHashtagFreq();
-			findNatureFromTweets();
 			tweetWithTimeOfDayChart();
 			retweetVsFavorites();
 			getTweetsWithMedia();
@@ -504,6 +558,7 @@ function refreshData(username) {
 	} catch (TypeError) {
 		console.log("Error occured");
 	}
+	$(".modal").modal();
 }
 
 document.getElementById("screenNameInput")
@@ -522,6 +577,27 @@ document.getElementById("profileCard")
 	.addEventListener("click", function() {
 		window.open("https://twitter.com/" + USER_INFO.screen_name);
 });
+
+
+function showBottomPopup(heading, subheading, link, content) {
+	if (link.length == 0) return;
+	if (subheading.length == 0) return;
+	if (link.length == 1 && subheading.length == 1) {
+		$("#popup-link").attr("href", link[0]);
+		$("#popup-subheading").html(subheading[0]);
+		$("#another")[0].style.display = "none";
+	}
+	else if (link.length == 2 && subheading.length == 2) {
+		$("#popup-link").attr("href", link[0]);		
+		$("#popup-subheading").html(subheading[0]);
+		$("#popup-subheading-1").html(subheading[1]);
+		$("#popup-link-1").attr("href", link[1]);		
+		$("#another")[0].style.display = "block";
+	}
+	$("#popup-heading").text(heading);
+	$("#popup-content").html(content);
+	$("#popup-trigger").click();
+}
 
 function hideLoaders() {
 	$('.preloader-background').delay(1700).fadeOut('slow');	

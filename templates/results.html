@@ -183,9 +183,9 @@
                 
                 <div class="card hoverable z-depth-2 white">
                     <div class="card-content">
-                        <span class="card-title"><span id="hashtagFrequency">Loading...</span></span>
+                        <span class="card-title"><span id="hashtagFrequency" title="Among tweets with hashtags (all tweets)">Loading...</span></span>
                     </div>
-                    <div class="card-content purple darken-4 white-text" style="font-size: larger">Hashtag Frequency</div>
+                    <div class="card-content purple darken-4 white-text" style="font-size: larger">Hashtag Frequency (<span id="hashtagFreqDataCount"></span>)</div>
                 </div>
 
             </div>
@@ -196,7 +196,7 @@
                     <div class="card-content">
                         <span class="card-title"><span id="tweetsWithMedia">Loading...</span></span>
                     </div>
-                    <div class="card-content teal darken-4 white-text" style="font-size: larger">Tweets with media</div>
+                    <div class="card-content teal darken-4 white-text" style="font-size: larger">Tweets with media (<span id="tweetsWithMediaCount"></span>)</div>
                 </div>
 
             </div>
@@ -215,9 +215,9 @@
         <div class="col l12 valign">
             <div class="card hoverable z-depth-2 white">
                 <div class="card-content" style="padding-right: 0; padding-left: 0">
-                    <span class="card-title"><span id="getTimeOfDay">Loading...</span></span>
+                    <div id="getTimeOfDay">Loading...</div>
                 </div>
-                <div class="card-content blue darken-4 white-text" style="font-size: larger">Tweets according to time of day</div>
+                <div class="card-content blue darken-4 white-text" style="font-size: larger">Tweets according to time of day (<span id="tweetWithTimeOfDayCount"></span>)</div>
             </div>
         </div>
     </div>
@@ -227,14 +227,14 @@
         <div class="col l6">
             <div class="z-depth-2 card hoverable">
                 <div id="tweetActivity">Loading...</div>
-                <div class="card-content teal darken-3 white-text" style="font-size: larger">Activity hours</div>
+    <div class="card-content teal darken-3 white-text" style="font-size: larger">Activity hours (<span id="activityHoursCount"></span>)</div>
             </div>
         </div>
 
         <div class="col l6">
             <div class="z-depth-2 card hoverable">
                 <div id="tweetLength">Loading...</div>
-                <div class="card-content pink darken-4 white-text" style="font-size: larger">Character Count of Tweets</div>
+    <div class="card-content pink darken-4 white-text" style="font-size: larger">Character Count of Tweets (<span id="characterCountCount"></span>)</div>
             </div>
         </div>
 		
@@ -244,16 +244,28 @@
 
 		<div class="col l12 z-depth-2 card hoverable" style="padding: 0">
 			<div id="retweetsvsfav">Loading...</div>
-			<div class="card-content red darken-4 white-text" style="font-size: larger">Retweets vs Favorites for your tweets</div>
+            <div class="card-content red darken-4 white-text" style="font-size: larger">
+                Retweets vs Favorites for your tweets (<span id="retweetsvsfavCount"></span>) <br>
+                <div style="margin-bottom: 5px;">
+                    <small class="left">Click a bar to find out the tweet</small>
+                    <small class="right">Scroll over the graph to zoom.</small>
+                </div>
+            </div>
 		</div>
 
     </div>
    
     <div class="row">
 
-		<div class="col l12 z-depth-2 card hoverable" style="padding: 0">
+		<div class="col l12 z-depth-2 card hoverable" style="padding-top: 5px">
 			<div id="timeBetweenTweets">Loading...</div>
-			<div class="card-content indigo darken-4 white-text" style="font-size: larger">Time between two consecutive tweets</div>
+            <div class="card-content indigo darken-4 white-text" style="font-size: larger">
+                Time between two consecutive tweets (<span id="timeGapBetweeenTweetsCount"></span>)
+                <div style="margin-bottom: 5px;">
+                    <small class="left">Click a bar to find out the tweet</small>
+                    <small class="right">Scroll over the graph to zoom.</small>
+                </div>
+            </div>
 		</div>
 
 	</div>
@@ -266,18 +278,27 @@
         <div class="col l6 s12">
         <h5 class="white-text">Thanks for passing by.</h5>
         <p class="grey-text text-lighten-4">
-            The analysis is based on latest 200 tweets, to avoid slowing down while fetching data from Twitter. 
-            <br>
-            The data is fetched from Twitter API. The developer claim no responsibility of any interpretations, misuse, validity of this data.
-            <br>
-            The privacy and security is handled by Twitter. Your personal data is not stored.
+            <ul class="collection" style="border: none">
+                <li class="collection-item white-text blue darken-2" style="border: none">
+                    The number in brackets indicate the number of tweets used for the particular analysis.
+                </li>
+                <li class="collection-item white-text blue darken-2" style="border: none">
+                    You can zoom "Time b/w tweets" and "Retweets v/s Favorites" graphs by scrolling over them.
+                </li>
+                <li class="collection-item white-text blue darken-2" style="border: none">
+                    The analysis is based on latest 200 tweets, to avoid slowing down while fetching data from Twitter.
+                </li>
+                <li class="collection-item white-text blue darken-2" style="border: none">
+                    The privacy and security is handled by Twitter. Your personal data is not stored.
+                </li>    
+            </ul>
         </p>
         </div>
         <div class="col l4 offset-l2 s12">
         <ul>
-            <li><a class="grey-text text-lighten-3" href="https://github.com/himanshub16/tweelyser">GitHub</a></li>
-            <li><a class="grey-text text-lighten-3" href="https://github.com/himanshub16/tweelyser/issues">Feedback</a></li>
-            <li>
+            <li><a class="grey-text text-lighten-3" style="text-decoration: underline" href="https://github.com/himanshub16/tweelyser">GitHub</a></li>
+            <li><a class="grey-text text-lighten-3" style="text-decoration: underline" href="https://github.com/himanshub16/tweelyser/issues">Feedback</a></li>
+            <li style="margin-top: 20px">
                 <span id="india" class="grey-text text-lighten-3">
                     <span>With</span>
                     <span id="unicode-heart">❤</span>
@@ -291,6 +312,30 @@
     <div class="footer-copyright">
     </div>
 </footer>
+
+<button id="popup-trigger" style="display: none" data-target="popup"></button>
+
+ <div id="popup" class="modal bottom-sheet">
+    <div class="modal-content container">
+        <div class="row valign-wrapper">
+            <h4 id="popup-heading">Modal Header</h4>
+            <div class="col l5 m5 s12 row valign">
+                <div>
+                    <div id="popup-subheading" style="margin-bottom: 5px;">A bunch of text</div>
+                    <a href="" target="_blank" class="left btn blue accent-4 white-text" id="popup-link"><i class="material-icons right">open_in_new</i>Open</a> &nbsp; &nbsp;
+                </div>
+                <div class="clearfix"></div>
+                <div id="another" style="display: hidden;">
+                    <div class="divider"></div>                
+                    <div id="popup-subheading-1">A bunch of text</div>
+                    <a href="" target="_blank" class="left btn blue accent-4 white-text" id="popup-link-1"><i class="material-icons right">open_in_new</i>Open</a>
+                </div>
+            </div>
+            <blockquote id="popup-content" class="row valign col l7 m7 s12" style="border-color: #2962ff"></blockquote>
+        </div>
+    </div>
+</div>
+
 
 <script>
     function loadJsFile (src, async) {
@@ -306,12 +351,14 @@
         'https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js',
+        'https://platform.twitter.com/widgets.js',
         '/static/application.js'
     ];
 
     for (var i = 0; i < jsList.length; i++) {
         loadJsFile(jsList[i], false);
     }
+
 </script>
 
 </body>
