@@ -276,6 +276,8 @@ function timeBetweenTweets() {
                         return value + " minutes";
                     else if (id === "gapDays")
                         return value + " days";
+                    else
+                        return value;
                 },
                 title: function(x) {
                     return (x+1) + ' and ' + (x+2);
@@ -337,7 +339,7 @@ function tweetWithTimeOfDayChart() {
                  TWEET_WITH_TIME_OF_DAY[6],TWEET_WITH_TIME_OF_DAY[7],TWEET_WITH_TIME_OF_DAY[8],
                  TWEET_WITH_TIME_OF_DAY[9],TWEET_WITH_TIME_OF_DAY[10],TWEET_WITH_TIME_OF_DAY[11] ]
             ],
-            type : 'spline',
+            type : 'spline'
         },
         axis: {
             x: {
@@ -374,7 +376,7 @@ function getTweets(screen_name) {
             for (var i = 0; i < TWEET_LIST.length; i++) {
 
                 // get date
-                var d = new Date( TWEET_LIST[i].created_at )
+                var d = new Date( TWEET_LIST[i].created_at );
                 var hour = d.getHours();
 
                 // get hashtags
