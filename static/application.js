@@ -81,6 +81,7 @@ var TIME_GAP_BETWEEN_TWEETS = [];
 var TWEET_RETWEET_FAV_COUNT_LIST = [];
 
 
+var chart_1 = null, chart_2 = null, chart_3 = null, chart_4 = null;
 
 
 // reset all variables
@@ -114,7 +115,7 @@ function resetVariables() {
 
     var TWEET_WITH_INTERVAL_OF_DAY = {
         "morning":0, "day":0, "evening":0, "night":0
-    }
+    };
 
     TWEET_WITH_TIME_OF_DAY_ARRAY = [
         { "interval": "0", "tweet_count": 0 },
@@ -189,7 +190,7 @@ function getTweetsWithMedia() {
 //Bar Graph
 function retweetVsFavorites() {
     $("#retweetsvsfavCount").text(TWEET_RETWEET_FAV_COUNT_LIST.length);
-    var chart = c3.generate({
+    chart_1 = c3.generate({
         bindto: "#retweetsvsfav",
         data: {
             json: TWEET_RETWEET_FAV_COUNT_LIST,
@@ -293,7 +294,7 @@ function timeBetweenTweets() {
 //Pie
 function tweetLength() {
     $("#characterCountCount").text(TWEET_LIST.length.toString());
-    var chart = c3.generate({
+    chart_2 = c3.generate({
         bindto: "#tweetLength",
         data: {
             // iris data from R
@@ -312,7 +313,7 @@ function tweetLength() {
 //Pie
 function tweetActivity() {
     $("#activityHoursCount").text(TWEET_LIST.length);
-    var chart = c3.generate({
+    chart_3 = c3.generate({
         bindto: "#tweetActivity",
         data: {
             // iris data from R
@@ -330,7 +331,7 @@ function tweetActivity() {
 //Line
 function tweetWithTimeOfDayChart() {
     $("#tweetWithTimeOfDayCount").text(TWEET_LIST.length);
-    var chart = c3.generate({
+    chart_4 = c3.generate({
         bindto: '#getTimeOfDay',
         data: {
             columns: [
@@ -373,6 +374,10 @@ function getTweets(screen_name) {
             var max_retweet = { "count": 0, "index": -1 };
             var total_hashtags = 0, tweets_with_hashtags = 0;
 
+            if (TWEET_LIST === undefined) {
+                TWEET_WITH_MAX_RETWEETS = { text: "The user hasn't tweeted." };
+                return;
+            }
             for (var i = 0; i < TWEET_LIST.length; i++) {
 
                 // get date
