@@ -20,3 +20,5 @@ Run the `app.py` file any time you want to test the app.
 * The analysis is based on latest 200 tweets, to avoid slowing down while fetching data from Twitter. 
 * The data is fetched from Twitter API. The developer claim no responsibility of any interpretations, misuse, validity of this data.
 * The privacy and security is handled by Twitter. Your personal data is not stored.
+### A better and more practical version of this project is [Analytics by Twitter](https://analytics.twitter.com).
+Please use that for practical purposes.
